@@ -15,8 +15,6 @@ def getlines(file):
 		line = line.strip()
 		if not line:
 			continue
-		if not line.isalnum():
-			continue
 		result.append(line)
 	return result
 
@@ -51,7 +49,7 @@ def getsrclines(file, kjkjs):
 	for line in open(file):
 		line = line.strip()
 		idx = line.find("//")
-		if idx >= 0 and line[idx:].find('"') == -1:
+		if idx == 0 or idx > 0 and line[idx:].find('"') == -1:
 			line = line[:idx]
 		line = line.strip()
 		if not line:
@@ -87,6 +85,8 @@ def step1(proj):
 	symtable = build_symtable(gids)
 	fkjkj = proj / ".lpat/deps.txt"
 	for line in getlines(fkjkj):
+		if "_" in line:
+			continue
 		gid = path2gid(proj.parent / line)
 		kjkjs.append(gid)
 	kjkjs.append(path2gid(proj))
